@@ -1,0 +1,55 @@
+
+POST http://localhost:5000/api/users/register HTTP/1.1
+content-type: application/json
+
+{
+    "name":"lcl",
+    "email": "siro.deviluke2@gmail.com",
+    "password":"123456"
+}
+###
+POST http://localhost:5000/api/users/activation HTTP/1.1
+content-type: application/json
+
+{
+    "activation_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGNsIiwiZW1haWwiOiJzaXJvLmRldmlsdWtlMkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCR2VVYxUWRJNWxNUjl0UGVhaEVOTUtlMWZHQklNWVE3RjEvRUkwV0dLRVFCaVFlWkZ0TU5McSIsImlhdCI6MTY2NTQxODEzOSwiZXhwIjoxNjY1NDE4NDM5fQ.7nnEkibGPyzZxm-vhfK2wALja93Sw-sGuG0BI46eJVg"
+}
+###
+POST http://localhost:5000/api/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "lcl3@gmail.com",
+    "password":"1234567"
+}
+###
+POST http://localhost:5000/api/users/refresh
+
+###
+POST http://localhost:5000/api/users/logout
+###
+POST http://localhost:5000/api/users/logout-all
+###
+POST http://localhost:5000/api/users/forgot HTTP/1.1
+content-type: application/json
+
+{
+    "email": "lcl2@gmail.com"
+}
+###
+POST http://localhost:5000/api/users/reset HTTP/1.1
+content-type: application/json
+
+{
+    "password": "1234567"
+}
+###
+GET http://localhost:5000/api/users/me
+###
+POST http://localhost:5000/api/users/update HTTP/1.1
+content-type: application/json
+
+{
+    "name": "LCL",
+    "avatar":"123"
+}

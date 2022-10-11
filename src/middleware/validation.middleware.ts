@@ -20,12 +20,16 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
             );
             req.body = value;
             next();
-        } catch (e: any) {
+        } catch (error: any) {
+            const status = error.status || 400;
             const errors: string[] = [];
-            e.details.forEach((error: Joi.ValidationErrorItem) => {
+            error.details.forEach((error: Joi.ValidationErrorItem) => {
                 errors.push(error.message);
             });
-            res.status(400).send({ errors: errors });
+            res.status(status).send({
+                status,
+                errors: errors,
+            });
         }
     };
 }

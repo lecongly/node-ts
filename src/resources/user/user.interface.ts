@@ -5,6 +5,6 @@ export default interface User extends Document {
     name: string;
     password: string;
     role: string;
-
-    isValidPassword(password: string): Promise<Error | boolean>;
+    tokenVersion: number;
+    avatar: string;
 }

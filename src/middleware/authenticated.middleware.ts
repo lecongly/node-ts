@@ -1,45 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
-import token from '@/utils/token';
-import UserModel from '@/resources/user/user.model';
-import Token from '@/utils/interfaces/token.interface';
 import HttpException from '@/utils/exceptions/http.exception';
-import jwt from 'jsonwebtoken';
+import { Cookies } from '@/utils/interfaces/token.interface';
+import { verifyAccessToken } from '@/utils/token';
+import { NextFunction, Request, Response } from 'express';
 
-async function authenticatedMiddleware(
+export function authMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
-): Promise<Response | void> {
-    const bearer = req.headers.authorization;
+) {
+    const token = verifyAccessToken(req.cookies[Cookies.AccessToken]);
 
-    if (!bearer || !bearer.startsWith('Bearer ')) {
+    if (!token) {
         return next(new HttpException(401, 'Unauthorized'));
     }
 
-    const accessToken = bearer.split('Bearer ')[1].trim();
-    try {
-        const payload: Token | jwt.JsonWebTokenError = await token.verifyToken(
-            accessToken
-        );
+    res.locals.token = token;
 
-        if (payload instanceof jwt.JsonWebTokenError) {
-            return next(new HttpException(401, 'Unauthorized'));
-        }
-
-        const user = await UserModel.findById(payload.id)
-            .select('-password')
-            .exec();
-
-        if (!user) {
-            return next(new HttpException(401, 'Unauthorized'));
-        }
-
-        req.user = user;
-
-        return next();
-    } catch (error) {
-        return next(new HttpException(401, 'Unauthorized'));
-    }
+    next();
 }
-
-export default authenticatedMiddleware;

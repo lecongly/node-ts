@@ -1,12 +1,14 @@
-import express, { Application } from 'express';
-import mongoose from 'mongoose';
-import compression from 'compression';
-import cors from 'cors';
-import morgan from 'morgan';
-import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middleware/error.middleware';
+import db from '@/utils/databases/init.mongodb';
+import Controller from '@/utils/interfaces/controller.interface';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express, { Application } from 'express';
 import helmet from 'helmet';
-import db from './databases/init.mongodb';
+import morgan from 'morgan';
+import fileUpload from 'express-fileupload';
+
 class App {
     public express: Application;
     public port: number;
@@ -25,6 +27,12 @@ class App {
         this.express.use(express.json());
         this.express.use(express.urlencoded({ extended: false }));
         this.express.use(compression());
+        this.express.use(cookieParser());
+        this.express.use(
+            fileUpload({
+                useTempFiles: true,
+            })
+        );
     }
     private initialiseControllers(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
